@@ -1,74 +1,109 @@
 # AI Intake Qualification Agent
 
-A conversational intake advisor built for **Microsoft Copilot Studio (Agent Builder)** that
-replaces the current manual, form-based intake process with a guided experience.
+A guided web app that turns a rough idea into a complete, sponsor-backed **BRD & ROI package**
+before it goes to formal review. Built to run and publish on **Replit**, using **OpenAI** for
+the AI features.
 
-The agent helps requesters turn rough ideas, incomplete asks, and early-stage requests into
-**complete, presentable BRD and ROI intake packages** that are ready for VP review.
-
-> **Final principle:** the agent should improve intake *quality*, not just intake *speed*.
-> It guides every request from **raw idea → refined business request → presentable BRD / ROI
-> package → VP-approved formal submission.**
-
----
-
-## What the agent does
-
-It does **not** behave like a form filler. It behaves like an experienced business intake
-advisor that understands what a good, acceptable submission looks like. It:
-
-- Guides the user conversationally (1–3 focused questions at a time).
-- Offers **selectable options** and sample wording for common intake fields.
-- Reads uploaded documents and extracts relevant details.
-- Checks completeness against a known standard before generating output.
-- Generates a structured **BRD / ROI package**.
-- Coordinates **VP sponsor approval** before formal submission.
-- Recommends a **routing path** after approval.
-
-It exists to reduce half-filled requests, vague submissions, unclear business cases, missing
-sponsor information, and requests that lack the detail needed for formal review.
-
-## Agent role
-
-The agent acts as: **intake advisor · BRD creation assistant · ROI framing assistant ·
-completeness checker · sponsor approval coordinator · triage recommendation assistant.**
-
-It should help the user *think through* the request — not just capture what the user types.
+It is **not a chatbot.** The experience is a structured wizard where every common field is a
+**selectable choice** (chips / single-select / multi-select). Free text is used only where a
+narrative is genuinely needed — and those fields get an **"✨ Improve"** button. You can also
+**upload a document** and the app reads it to pre-fill the answers.
 
 ---
 
-## Repository layout
+## What it does
+
+- **Guided, selectable intake** — Request Type, Business Area, Project Size, Business Value,
+  Urgency, Sponsor status, and more are all click-to-select options, not typing.
+- **Document extraction** — upload a PDF / Word / text file; the server extracts the text and
+  OpenAI maps it onto the intake fields to pre-fill the wizard.
+- **AI wording help** — improve weak answers; the problem-statement field reframes a "solution"
+  back into the underlying business problem.
+- **Deterministic ROI calculator** — the math runs in code (reproducible); OpenAI only narrates
+  it. Auto-classifies the value into bands and always labels it an **estimate**.
+- **Completeness & readiness check** — lists what's missing and gives a plain-language verdict.
+- **BRD / ROI generation** — produces the full 21-section document with routing, classification,
+  and next step; view, copy, or download as Markdown.
+- **Guardrail** — flags that a request cannot move to formal submission without a named VP
+  sponsor.
+
+---
+
+## Run it on Replit
+
+1. **Import** this repo into Replit (it auto-detects Node from `package.json` / `.replit`).
+2. Open **Secrets** (lock icon) and add:
+   - `OPENAI_API_KEY` — your OpenAI key *(required for the AI features).*
+   - `OPENAI_MODEL` — optional, defaults to `gpt-4o`.
+3. Click **Run**. Replit installs dependencies and starts `npm start`.
+4. **Publish/Deploy** using Replit's Deploy button (the `.replit` file is preconfigured for
+   autoscale on port 80 → 3000).
+
+Without `OPENAI_API_KEY` the app still runs and the wizard works manually — only the AI-assisted
+steps (extraction, improve, ROI narrative, generation) are disabled until the key is added.
+
+## Run it locally
+
+```bash
+npm install
+cp .env.example .env   # then put your OPENAI_API_KEY in .env
+npm start              # http://localhost:3000
+```
+
+---
+
+## How it's built
+
+```
+server.js              Express server + API routes
+src/openai.js          OpenAI prompts: extract, improve, ROI narrative, completeness, generate
+src/extract.js         File text extraction (pdf / docx / txt / md)
+src/roi.js             Deterministic ROI math + value-band classification
+src/options.json       Single source of truth for all selectable option sets
+public/index.html      App shell
+public/app.js          The guided wizard (selectable fields, upload, ROI, review, generate)
+public/styles.css      Styling
+```
+
+### API routes
+
+| Route | Purpose |
+|-------|---------|
+| `GET /api/options` | Option sets + whether AI is configured. |
+| `POST /api/extract` | Upload a file → extracted field suggestions. |
+| `POST /api/improve` | Improve one field's wording. |
+| `POST /api/roi` | Compute ROI estimate (+ narrative). |
+| `POST /api/completeness` | Missing areas + readiness assessment. |
+| `POST /api/generate` | Full BRD / ROI package + routing. |
+| `POST /api/save` | Optional: persist a submission to `data/submissions.json`. |
+
+---
+
+## Domain reference (the behavior the app implements)
+
+The `agent/`, `data/`, and `knowledge/` folders document the intake standard the app is built
+around — the question set, option lists, the 21-section BRD template, routing logic, status
+values, guardrails, and the recommended data schema. They are provider-neutral reference docs,
+not a chatbot script.
 
 | File | Purpose |
 |------|---------|
-| [`agent/system-prompt.md`](agent/system-prompt.md) | Consolidated agent instructions — paste directly into Copilot Studio. |
-| [`agent/conversation-starter.md`](agent/conversation-starter.md) | Required greeting and conversation pacing rules. |
-| [`agent/core-intake-questions.md`](agent/core-intake-questions.md) | The full question set the agent collects, section by section. |
-| [`agent/selectable-options.md`](agent/selectable-options.md) | Quick-reply / multiple-choice option sets for structured fields. |
-| [`agent/brd-roi-template.md`](agent/brd-roi-template.md) | The 21-section BRD / ROI output document structure. |
-| [`agent/routing-logic.md`](agent/routing-logic.md) | Routing paths and the completeness check. |
-| [`agent/status-values.md`](agent/status-values.md) | The lifecycle status values. |
-| [`agent/vp-approval-workflow.md`](agent/vp-approval-workflow.md) | Sponsor approval flow and decision handling. |
-| [`agent/guardrails.md`](agent/guardrails.md) | Hard rules the agent must always follow. |
-| [`data/intake-schema.md`](data/intake-schema.md) | Recommended data fields for the Dataverse table / SharePoint list. |
-| [`docs/copilot-studio-build-guide.md`](docs/copilot-studio-build-guide.md) | How to assemble the agent in Copilot Studio. |
-| [`knowledge/README.md`](knowledge/README.md) | What to load as grounding knowledge sources and how to use it. |
+| [`agent/core-intake-questions.md`](agent/core-intake-questions.md) | The full question set. |
+| [`agent/selectable-options.md`](agent/selectable-options.md) | Option sets (mirrors `src/options.json`). |
+| [`agent/brd-roi-template.md`](agent/brd-roi-template.md) | The 21-section output structure. |
+| [`agent/routing-logic.md`](agent/routing-logic.md) | Completeness, readiness, and routing. |
+| [`agent/status-values.md`](agent/status-values.md) | Lifecycle statuses. |
+| [`agent/vp-approval-workflow.md`](agent/vp-approval-workflow.md) | Sponsor approval flow. |
+| [`agent/guardrails.md`](agent/guardrails.md) | Hard rules. |
+| [`data/intake-schema.md`](data/intake-schema.md) | Recommended record fields. |
 
 ---
 
-## How to build it
+## Notes & next steps
 
-1. Read [`docs/copilot-studio-build-guide.md`](docs/copilot-studio-build-guide.md) for the
-   end-to-end assembly steps.
-2. Paste [`agent/system-prompt.md`](agent/system-prompt.md) into the agent's instructions.
-3. Add the knowledge sources described in [`knowledge/README.md`](knowledge/README.md).
-4. Create the Dataverse table / SharePoint list from [`data/intake-schema.md`](data/intake-schema.md).
-5. Build the Power Automate flow and Teams notifications for the VP approval workflow.
-
----
-
-## Agent identity
-
-- **Name:** AI Intake Qualification Agent
-- **Purpose:** replace the manual form-based intake process with a guided conversational
-  experience that produces sponsor-backed, review-ready BRD / ROI packages.
+- The VP approval workflow is documented but not yet wired to email/Teams — a good next addition
+  (e.g. a notification step on the `/api/save` submission).
+- Sponsor level/approval are self-attested via the form; treat them as unverified until a real
+  approval step exists.
+- Add authentication before exposing a public deployment, since submissions contain
+  business-sensitive information.

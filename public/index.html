@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Intake Qualification Agent</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">◆</span>
+      <div>
+        <h1>AI Intake Qualification Agent</h1>
+        <p class="tagline">Turn a rough idea into a complete, sponsor-backed BRD &amp; ROI package.</p>
+      </div>
+    </div>
+    <div id="ai-status" class="ai-status" title="AI status"></div>
+  </header>
+
+  <main class="layout">
+    <aside class="sidebar">
+      <ol id="step-nav" class="step-nav"></ol>
+    </aside>
+
+    <section class="content">
+      <div id="step" class="step-card"></div>
+
+      <nav class="step-actions">
+        <button id="btn-back" class="btn ghost" type="button">← Back</button>
+        <div class="spacer"></div>
+        <span id="step-counter" class="step-counter"></span>
+        <button id="btn-next" class="btn primary" type="button">Next →</button>
+      </nav>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

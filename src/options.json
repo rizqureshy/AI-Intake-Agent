@@ -1,0 +1,97 @@
+{
+  "requestType": [
+    "New capability",
+    "Process improvement",
+    "AI / automation use case",
+    "Data and analytics request",
+    "Technology enhancement",
+    "Reporting request",
+    "Compliance or risk request",
+    "Other",
+    "Not sure yet"
+  ],
+  "businessArea": [
+    "Sales",
+    "Revenue Operations",
+    "Marketing",
+    "Customer Success",
+    "Operations",
+    "Process Improvement",
+    "Data and Analytics",
+    "AI Innovation",
+    "Technology / DIO",
+    "Finance",
+    "Legal / Compliance",
+    "Other",
+    "Not sure yet"
+  ],
+  "projectSize": [
+    "Small team impact",
+    "Department-level impact",
+    "Regional impact",
+    "Global impact",
+    "Enterprise-wide impact",
+    "Not sure yet"
+  ],
+  "businessValueType": [
+    "Time savings",
+    "Cost savings",
+    "Revenue impact",
+    "Risk reduction",
+    "Compliance improvement",
+    "Customer experience improvement",
+    "Employee experience improvement",
+    "Strategic enablement"
+  ],
+  "urgency": [
+    "Low",
+    "Medium",
+    "High",
+    "Executive critical",
+    "Customer critical",
+    "Compliance critical"
+  ],
+  "roiCategory": [
+    "Not yet quantified",
+    "Less than $100K",
+    "$100K to $500K",
+    "$500K to $1M",
+    "$1M to $5M",
+    "$5M to $10M",
+    "$10M and above"
+  ],
+  "requesterRole": [
+    "Business owner",
+    "Requester",
+    "SME",
+    "Impacted stakeholder"
+  ],
+  "sponsorStatus": [
+    "VP sponsor not yet identified",
+    "Sponsor is aware but has not approved",
+    "Sponsor has approved verbally",
+    "VP sponsor identified",
+    "Not sure yet"
+  ],
+  "yesNo": [
+    "Yes",
+    "No",
+    "Not sure yet"
+  ],
+  "routing": [
+    "Core DIO / Technology Delivery",
+    "AI Innovation",
+    "Data and Analytics",
+    "Functional Team / Alternative Delivery",
+    "Process Improvement",
+    "Existing Tool / Configuration Change",
+    "Not ready for routing"
+  ],
+  "readiness": [
+    "Ready for VP review",
+    "Needs more information",
+    "Needs SME validation",
+    "Needs ROI validation",
+    "Not ready for formal review"
+  ]
+}
